@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/marcins/cfml-ci.png?branch=master)](https://travis-ci.org/marcins/cfml-ci)
+
 # CFML CI
 
 A template for integrating CFML projects with [Continous Integration](http://en.wikipedia.org/wiki/Continuous_integration) servers.  Extracted from work done for the [Framework One](https://github.com/framework-one/fw1) project.

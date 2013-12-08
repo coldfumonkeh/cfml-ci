@@ -33,8 +33,7 @@ fi
 case $1 in
 	install)
 		if [ -d $WORK_DIR ]; then
-			echo "DEBUG not removing $WORK_DIR"
-			#rm -rf $WORKDIR
+			rm -rf $WORKDIR
 		fi
 
 		mkdir -p $WORK_DIR

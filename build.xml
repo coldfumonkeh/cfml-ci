@@ -29,7 +29,7 @@
   </target>
 
   <target name="stop-ci-railo">
-    <exec executable="/bin/bash" spawn="true">
+    <exec executable="/bin/bash" spawn="false">
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
       <arg line="tests/ci/scripts/ci-helper.sh stop"/>

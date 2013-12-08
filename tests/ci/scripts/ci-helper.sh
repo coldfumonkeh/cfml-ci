@@ -27,6 +27,7 @@ fi
 case $1 in
 	install)
 		if [ -d $WORKDIR ]; then
+			echo "DEBUG not removing $WORKDIR"
 			#rm -rf $WORKDIR
 		fi
 

@@ -9,8 +9,7 @@
   <property name="server.port" value="8888"/>
   <property name="output.dir" value="tests/ci/results/"/>
 
-  <property environment="env"/>
-  <property name="work.dir" value="${env.WORK_DIR}" />
+  <property name="work.dir" value="" />
 
   <target name="install-ci-deps">
     <exec executable="/bin/bash" failonerror="true">

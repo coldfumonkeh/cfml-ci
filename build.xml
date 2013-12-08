@@ -20,8 +20,8 @@
     </exec>
   </target>
 
-  <target name="run-ci-railo">
-    <exec executable="/bin/bash"  spawn="false" failonerror="true">
+  <target name="start-ci-railo">
+    <exec executable="/bin/bash" spawn="false" failonerror="true">
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
       <arg line="tests/ci/scripts/ci-helper.sh start"/>
@@ -36,7 +36,7 @@
     </exec>
   </target>
 
-  <target name="test-ci-railo" depends="run-ci-railo,test,stop-ci-railo">
+  <target name="test-ci-railo" depends="start-ci-railo,test,stop-ci-railo">
     <fail if="mxunit.failed" message="At least one test failure!"/>
   </target>
 

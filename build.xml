@@ -10,7 +10,7 @@
   <property name="output.dir" value="tests/ci/results/"/>
 
   <target name="install-ci-deps">
-    <exec executable="/bin/bash">
+    <exec executable="/bin/bash" failonerror="true">
       <arg line="tests/ci/scripts/ci-helper.sh install ${test.project}"/>
     </exec>
   </target>

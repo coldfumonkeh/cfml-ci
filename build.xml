@@ -10,22 +10,28 @@
   <property name="output.dir" value="tests/ci/results/"/>
 
   <property name="work.dir" value="" />
+  <property name="build.dir" value="" />
 
   <target name="install-ci-deps">
     <exec executable="/bin/bash" failonerror="true">
       <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
       <arg line="tests/ci/scripts/ci-helper.sh install ${test.project}"/>
     </exec>
   </target>
 
   <target name="run-ci-railo">
     <exec executable="/bin/bash"  spawn="false" failonerror="true">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
       <arg line="tests/ci/scripts/ci-helper.sh start"/>
     </exec>
   </target>
 
   <target name="stop-ci-railo">
     <exec executable="/bin/bash" spawn="true">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
       <arg line="tests/ci/scripts/ci-helper.sh stop"/>
     </exec>
   </target>

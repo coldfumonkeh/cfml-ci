@@ -16,23 +16,29 @@ fi
 echo "Working directory: $WORK_DIR, Build directory: $BUILD_DIR"
 
 if [ ! "$1" == "install" ]; then
-	if [ ! -d $WORKDIR ]; then
+
+	if [ ! -d $WORK_DIR ]; then
 		echo "Working directory doesn't exist and this isn't an install!"
 		exit 1
 	else
-		cd $WORKDIR
+		cd $WORK_DIR
+	fi
+else
+	if [ ! -n "$2" ]; then
+		echo "usage: $0 install PROJECTNAME";
+		exit 1
 	fi
 fi
 
 case $1 in
 	install)
-		if [ -d $WORKDIR ]; then
-			echo "DEBUG not removing $WORKDIR"
+		if [ -d $WORK_DIR ]; then
+			echo "DEBUG not removing $WORK_DIR"
 			#rm -rf $WORKDIR
 		fi
 
-		mkdir -p $WORKDIR
-		cd $WORKDIR
+		mkdir -p $WORK_DIR
+		cd $WORK_DIR
 
 		# Download Railo Express
 		if [[ "$RAILO_URL" == *zip ]]; then
@@ -46,7 +52,7 @@ case $1 in
 		wget $WGET_OPTS $MXUNIT_URL -O mxunit.zip
 		unzip -q mxunit.zip -d railo/webapps/www/
 		mv railo/webapps/www/mxunit* railo/webapps/www/mxunit
-		ln -s $TRAVIS_BUILD_DIR railo/webapps/www/$2
+		ln -s $BUILD_DIR railo/webapps/www/$2
 		;;
 	start)
 		if [ ! -f railo/start ]; then

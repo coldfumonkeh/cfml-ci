@@ -9,8 +9,12 @@
   <property name="server.port" value="8888"/>
   <property name="output.dir" value="tests/ci/results/"/>
 
+  <property environment="env"/>
+  <property name="work.dir" value="${env.WORK_DIR}" />
+
   <target name="install-ci-deps">
     <exec executable="/bin/bash" failonerror="true">
+      <env key="WORK_DIR" value="${work.dir}" />
       <arg line="tests/ci/scripts/ci-helper.sh install ${test.project}"/>
     </exec>
   </target>

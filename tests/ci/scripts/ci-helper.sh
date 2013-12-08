@@ -1,18 +1,19 @@
 #!/bin/bash
 WGET_OPTS="-nv"
-if [ "$TRAVIS" == "true" ]; then
-	WORKDIR="$HOME/work"
-	RAILO_URL=http://getrailo.com/railo/remote/download/4.1.1.009/railix/linux/railo-express-4.1.1.009-nojre.tar.gz
-	MXUNIT_URL="https://github.com/marcins/mxunit/archive/fix-railo-nulls.zip"
-else
-	# not TravisCI - local OSX testing
-	WORKDIR=/tmp/work
-	RAILO_URL="http://localhost/railo-express-4.1.1.009-macosx.zip"
-	MXUNIT_URL="https://github.com/marcins/mxunit/archive/fix-railo-nulls.zip"
-	TRAVIS_BUILD_DIR=`pwd`
+RAILO_URL="http://getrailo.com/railo/remote/download/4.1.1.009/railix/linux/railo-express-4.1.1.009-nojre.tar.gz"
+MXUNIT_URL="https://github.com/marcins/mxunit/archive/fix-railo-nulls.zip"
+
+# WORK_DIR and BUILD_DIR must be set!
+if [ ! -n "$WORK_DIR" ]; then
+	echo "WORK_DIR must be set!"
+	exit 1
 fi
 
-echo "Working directory: $WORKDIR"
+if [ ! -n "$BUILD_DIR" ]; then
+	BUILD_DIR=`pwd`
+fi
+
+echo "Working directory: $WORK_DIR, Build directory: $BUILD_DIR"
 
 if [ ! "$1" == "install" ]; then
 	if [ ! -d $WORKDIR ]; then
@@ -26,7 +27,7 @@ fi
 case $1 in
 	install)
 		if [ -d $WORKDIR ]; then
-			rm -rf $WORKDIR
+			#rm -rf $WORKDIR
 		fi
 
 		mkdir -p $WORKDIR

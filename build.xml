@@ -9,25 +9,38 @@
   <property name="server.port" value="8888"/>
   <property name="output.dir" value="tests/ci/results/"/>
 
+  <property name="work.dir" value="" />
+  <property name="build.dir" value="" />
+  <property name="railo.url" value="" />
+  <property name="mxunit.url" value="" />
+
   <target name="install-ci-deps">
-    <exec executable="/bin/bash">
+    <exec executable="/bin/bash" failonerror="true">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
+      <env key="RAILO_URL" value="${railo.url}" />
+      <env key="MXUNIT_URL" value="${mxunit.url}" />
       <arg line="tests/ci/scripts/ci-helper.sh install ${test.project}"/>
     </exec>
   </target>
 
-  <target name="run-ci-railo">
-    <exec executable="/bin/bash"  spawn="false" failonerror="true">
+  <target name="start-ci-railo">
+    <exec executable="/bin/bash" spawn="false" failonerror="true">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
       <arg line="tests/ci/scripts/ci-helper.sh start"/>
     </exec>
   </target>
 
   <target name="stop-ci-railo">
-    <exec executable="/bin/bash" spawn="true">
+    <exec executable="/bin/bash" spawn="false">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
       <arg line="tests/ci/scripts/ci-helper.sh stop"/>
     </exec>
   </target>
 
-  <target name="test-ci-railo" depends="run-ci-railo,test,stop-ci-railo">
+  <target name="test-ci-railo" depends="start-ci-railo,test,stop-ci-railo">
     <fail if="mxunit.failed" message="At least one test failure!"/>
   </target>
 

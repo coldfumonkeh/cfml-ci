@@ -1,50 +1,75 @@
 #!/bin/bash
-WGET_OPTS="-nv"
-if [ "$TRAVIS" == "true" ]; then
-	WORKDIR="$HOME/work"
-	RAILO_URL=http://getrailo.com/railo/remote/download/4.1.1.009/railix/linux/railo-express-4.1.1.009-nojre.tar.gz
-	MXUNIT_URL="https://github.com/marcins/mxunit/archive/fix-railo-nulls.zip"
-else
-	# not TravisCI - local OSX testing
-	WORKDIR=/tmp/work
-	RAILO_URL="http://localhost/railo-express-4.1.1.009-macosx.zip"
-	MXUNIT_URL="https://github.com/marcins/mxunit/archive/fix-railo-nulls.zip"
-	TRAVIS_BUILD_DIR=`pwd`
+# WORK_DIR and BUILD_DIR must be set!
+if [ ! -n "$WORK_DIR" ]; then
+	echo "WORK_DIR must be set!"
+	exit 1
 fi
 
-echo "Working directory: $WORKDIR"
+if [ ! -n "$BUILD_DIR" ]; then
+	BUILD_DIR=`pwd`
+fi
+
+echo "Working directory: $WORK_DIR, Build directory: $BUILD_DIR"
 
 if [ ! "$1" == "install" ]; then
-	if [ ! -d $WORKDIR ]; then
+
+	if [ ! -d $WORK_DIR ]; then
 		echo "Working directory doesn't exist and this isn't an install!"
 		exit 1
 	else
-		cd $WORKDIR
+		cd $WORK_DIR
+	fi
+else
+	if [ ! -n "$2" ]; then
+		echo "usage: $0 install PROJECTNAME";
+		exit 1
 	fi
 fi
 
 case $1 in
 	install)
-		if [ -d $WORKDIR ]; then
-			rm -rf $WORKDIR
+		if [ -d $WORK_DIR ]; then
+			rm -rf $WORK_DIR
 		fi
 
-		mkdir -p $WORKDIR
-		cd $WORKDIR
+		mkdir -p $WORK_DIR
+		cd $WORK_DIR
 
-		# Download Railo Express
-		if [[ "$RAILO_URL" == *zip ]]; then
-			wget $WGET_OPTS $RAILO_URL -O railo.zip
-			unzip -q railo.zip
-		else
-			wget $WGET_OPTS $RAILO_URL -O railo.tar.gz
-			tar -zxf railo.tar.gz
+		if [ ! -n "$RAILO_URL" ]; then
+			RAILO_URL="http://getrailo.com/railo/remote/download/4.1.1.009/railix/linux/railo-express-4.1.1.009-nojre.tar.gz"
 		fi
+
+		if [ ! -n "$MXUNIT_URL" ]; then
+			MXUNIT_URL="https://github.com/marcins/mxunit/archive/fix-railo-nulls.zip"
+		fi
+
+		WGET_OPTS="-nv"
+
+		function download_and_extract {
+			FILENAME=`echo $1|awk '{split($0,a,"/"); print a[length(a)]}'`
+			if [[ "$1" == /* ]]; then
+				echo "Copying $1 to $FILENAME"
+				cp $1 $FILENAME
+			else
+				echo "Downloading $1 to $FILENAME"
+				wget $WGET_OPTS $1 -O $FILENAME
+			fi
+
+			if [[ "$FILENAME" == *zip ]]; then
+				unzip -q $FILENAME
+			else
+				tar -zxf $FILENAME
+			fi
+			rm $FILENAME
+			result=$FILENAME
+		}
+
+		download_and_extract $RAILO_URL
+		download_and_extract $MXUNIT_URL
 		mv railo-express* railo
-		wget $WGET_OPTS $MXUNIT_URL -O mxunit.zip
-		unzip -q mxunit.zip -d railo/webapps/www/
-		mv railo/webapps/www/mxunit* railo/webapps/www/mxunit
-		ln -s $TRAVIS_BUILD_DIR railo/webapps/www/$2
+		mv mxunit* railo/webapps/www/mxunit
+
+		ln -s $BUILD_DIR railo/webapps/www/$2
 		;;
 	start)
 		if [ ! -f railo/start ]; then

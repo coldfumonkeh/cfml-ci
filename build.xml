@@ -11,11 +11,15 @@
 
   <property name="work.dir" value="" />
   <property name="build.dir" value="" />
+  <property name="railo.url" value="" />
+  <property name="mxunit.url" value="" />
 
   <target name="install-ci-deps">
     <exec executable="/bin/bash" failonerror="true">
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
+      <env key="RAILO_URL" value="${railo.url}" />
+      <env key="MXUNIT_URL" value="${mxunit.url}" />
       <arg line="tests/ci/scripts/ci-helper.sh install ${test.project}"/>
     </exec>
   </target>

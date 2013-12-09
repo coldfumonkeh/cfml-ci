@@ -1,18 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project basedir="." default="test" name="CFML CI">
 
+  <!--
+    The CFML CI template project.
+
+    For integration instructions, see the Github project page:
+
+    https://github.com/marcins/cfml-ci
+  -->
+
+  <!-- you should change this value to a short name for your project
+    will be used a symlink so shouldn't contain spaces -->
   <property name="test.project" value="cfml-ci" />
+
+  <!-- these properties can either be passed in from your build server
+    (recommended), or set here if you're sure about that -->
+
+  <!-- the directory where the web server will be installed, WARNING
+    this directory WILL BE DELETED if it already exists -->
+  <property name="work.dir" value="" />
+
+  <!-- the directory containing your project web root, this will be symlinked
+    in to the webserver.  Might be able to be left blank -->
+  <property name="build.dir" value="" />
+
+  <!-- the URL to download Railo Express from. TODO move the default URL from the CI
+    helper script to here -->
+  <property name="railo.url" value="" />
+
+  <!-- the URL to download MXUnit from. TODO move the default URL from the CI
+    helper script to here -->
+  <property name="mxunit.url" value="" />
+
+  <!--
+    ***
+    Generally no need to touch anything below this point, but feel free to
+    customise it!
+    ***
+  -->
 
   <property name="mxunit.jar" value="tests/ci/mxunit-ant.jar"/>
   <property name="mxunit.output.jar" value="tests/ci/mxunit-output-ant.jar"/>
   <property name="server.name" value="localhost"/>
   <property name="server.port" value="8888"/>
   <property name="output.dir" value="tests/ci/results/"/>
-
-  <property name="work.dir" value="" />
-  <property name="build.dir" value="" />
-  <property name="railo.url" value="" />
-  <property name="mxunit.url" value="" />
 
   <target name="install-ci-deps">
     <exec executable="/bin/bash" failonerror="true">

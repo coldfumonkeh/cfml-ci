@@ -1,3 +1,9 @@
 language: java
-install: ant -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR install-ci-deps
-script: ant -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR test-ci-railo
+env:
+  global:
+    - FILE_SOURCE=remote
+  matrix:
+    - PLATFORM=railo41
+    - PLATFORM=acf10
+install: ant -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM install-ci-deps
+script: ant -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM test-ci-railo

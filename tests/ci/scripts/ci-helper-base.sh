@@ -41,7 +41,7 @@ function download_and_extract {
 	if [[ "$FILENAME" == *zip ]]; then
 		unzip -q $FILENAME
 	else
-		tar -zxf $FILENAME
+		tar -zxpf $FILENAME
 	fi
 	rm $FILENAME
 	result=$FILENAME

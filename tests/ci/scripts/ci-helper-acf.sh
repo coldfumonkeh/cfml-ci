@@ -20,6 +20,10 @@ case $1 in
 
 		chmod a+x coldfusion10/cfusion/bin/parseargs
 		chmod a+x coldfusion10/jre/bin/java
+		echo "DEBUG >>"
+		ls -al coldfusion10/jre/bin/java
+		ls -al coldfusion10/cfusion/bin/parseargs
+		echo "<< DEBUG"
 		;;
 	start|stop)
 		;;

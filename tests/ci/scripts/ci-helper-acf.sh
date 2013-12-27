@@ -18,8 +18,8 @@ case $1 in
 		# TODO modify port in cfusion/runtime/conf/server.xml
 		sed -i "s/8500/$SERVER_PORT/g" coldfusion10/cfusion/runtime/conf/server.xml
 
-		chmod u+x coldfusion10/cfusion/bin/parseargs
-		chmod u+x coldfusion10/jre/bin/java
+		chmod a+x coldfusion10/cfusion/bin/parseargs
+		chmod a+x coldfusion10/jre/bin/java
 		;;
 	start|stop)
 		;;

@@ -13,17 +13,10 @@ case $1 in
 		ln -s $BUILD_DIR coldfusion10/cfusion/wwwroot/$2
 
 		echo "Fixing ACF install directory..."
-		LC_CTYPE=C find ./ -type f -exec sed -i'' -e 's/\/opt\/coldfusion10\//\/tmp\/work\/coldfusion10\//g' {} \;
+		LC_CTYPE=C find ./ -type f -exec sed -i'' -e "s#/opt/coldfusion10/#$WORK_DIR/coldfusion10/#g" {} \;
 
 		# TODO modify port in cfusion/runtime/conf/server.xml
 		sed -i "s/8500/$SERVER_PORT/g" coldfusion10/cfusion/runtime/conf/server.xml
-
-		chmod a+x coldfusion10/cfusion/bin/parseargs
-		chmod a+x coldfusion10/jre/bin/java
-		echo "DEBUG >>"
-		ls -al coldfusion10/jre/bin/java
-		ls -al coldfusion10/cfusion/bin/parseargs
-		echo "<< DEBUG"
 		;;
 	start|stop)
 		;;

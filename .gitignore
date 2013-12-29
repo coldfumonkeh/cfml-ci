@@ -1,3 +1,4 @@
 /tests/ci/results
 /tests/ci/results/*
 /WEB-INF
+.ant-targets-build.xml

@@ -76,7 +76,7 @@ case $1 in
 		$CONTROL_SCRIPT start&
 		until curl --connect-timeout 2 -m 2 -s $HEALTHCHECK_URL>/dev/null
 		do
-			echo "Waiting for server... (Last: $?)"
+			echo "Waiting for server... (Last exit code: $?)"
 			sleep 2
 		done
 		;;

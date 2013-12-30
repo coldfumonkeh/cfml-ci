@@ -58,8 +58,8 @@ Travis implementation is relatively straightforward, there are sensible defaults
 
 ### Jenkins
 
-- [] *TODO*: update this section after the move to "platforms"
-
+ - **TODO**: update this section after the move to "platforms"
+ 
  * Create a new project
  * Provide your source repository settings as per usual
  * add an "Invoke Ant" build step
@@ -78,7 +78,7 @@ mxunit.url=/home/user/fix-railo-nulls.zip
 
 ### Bamboo
 
-- [] *TODO*: I don't have a Bamboo install, so either someone else can write this or wait for me to get around to trying a trial!
+ - **TODO**: I don't have a Bamboo install, so either someone else can write this or wait for me to get around to trying a trial!
 
 ## History
 

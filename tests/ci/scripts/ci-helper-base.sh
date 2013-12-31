@@ -57,6 +57,7 @@ HEALTHCHECK_URL="http://localhost:$SERVER_PORT"
 case $1 in
 	install)
 		if [ -d $WORK_DIR ]; then
+			echo "Removing $WORK_DIR"
 			rm -rf $WORK_DIR
 		fi
 
@@ -68,9 +69,8 @@ case $1 in
 		# assume platform dir is the only dir
 		FIRST_DIR=`ls -b`
 		if [ "$FIRST_DIR" != "$PLATFORM_DIR" ]; then
-			mv `ls -b` $PLATFORM_DIR
+			mv $FIRST_DIR $PLATFORM_DIR
 		fi
-
 		download_and_extract $TESTFRAMEWORK_URL
 
 		case $TESTFRAMEWORK in

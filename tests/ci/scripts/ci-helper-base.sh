@@ -65,7 +65,7 @@ case $1 in
 		cd $WORK_DIR
 
 		download_and_extract $PLATFORM_URL
-		download_and_extract $MXUNIT_URL
+		download_and_extract $TESTFRAMEWORK_URL
 		;;
 	start)
 		if [ ! -f $CONTROL_SCRIPT ]; then

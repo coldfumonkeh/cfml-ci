@@ -10,12 +10,11 @@ case $1 in
 	install)
 		mv mxunit* coldfusion10/cfusion/wwwroot/mxunit
 
+		echo "Fixing ACF install directory..."
+		grep -rl "/opt/coldfusion10/" . | xargs -n 1 sed -i "s#/opt/coldfusion10/#$WORK_DIR/coldfusion10/#g"
+
 		ln -s $BUILD_DIR coldfusion10/cfusion/wwwroot/$2
 
-		echo "Fixing ACF install directory..."
-		LC_CTYPE=C find ./ -type f -exec sed -i'' -e "s#/opt/coldfusion10/#$WORK_DIR/coldfusion10/#g" {} \;
-
-		# TODO modify port in cfusion/runtime/conf/server.xml
 		sed -i "s/8500/$SERVER_PORT/g" coldfusion10/cfusion/runtime/conf/server.xml
 		;;
 	start|stop)

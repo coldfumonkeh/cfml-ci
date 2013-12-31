@@ -1,5 +1,4 @@
 #!/bin/bash
-# WORK_DIR and BUILD_DIR must be set!
 if [ ! -n "$WORK_DIR" ]; then
 	echo "WORK_DIR must be set!"
 	exit 1
@@ -65,7 +64,24 @@ case $1 in
 		cd $WORK_DIR
 
 		download_and_extract $PLATFORM_URL
+
+		# assume platform dir is the only dir
+		FIRST_DIR=`ls -b`
+		if [ "$FIRST_DIR" != "$PLATFORM_DIR" ]; then
+			mv `ls -b` $PLATFORM_DIR
+		fi
+
 		download_and_extract $TESTFRAMEWORK_URL
+
+		case $TESTFRAMEWORK in
+			mxunit)
+				mv mxunit* "$WEBROOT$TESTFRAMEWORK_DIR"
+				;;
+			testbox)
+				mv testbox "$WEBROOT$TESTFRAMEWORK_DIR"
+				;;
+		esac
+		ln -s $BUILD_DIR $WEBROOT$2
 		;;
 	start)
 		if [ ! -f $CONTROL_SCRIPT ]; then

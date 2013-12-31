@@ -1,7 +1,4 @@
 #!/bin/bash
-
-echo "Test Framework: $TESTFRAMEWORK $TESTFRAMEWORK_URL"
-
 case $1 in
 	start)
 		CONTROL_SCRIPT='railo/start'
@@ -11,22 +8,13 @@ case $1 in
 		;;
 esac
 
+PLATFORM_DIR="railo"
+WEBROOT="railo/webapps/www/"
 MY_DIR=`dirname $0`
 source $MY_DIR/ci-helper-base.sh $1 $2
 
 case $1 in
 	install)
-		mv railo-express* railo
-		echo "mv $TESTFRAMEWORK* railo/webapps/www/$TESTFRAMEWORK"
-		case $TESTFRAMEWORK in
-			mxunit)
-				mv mxunit* railo/webapps/www/$TESTFRAMEWORK
-				;;
-			testbox)
-				mv testbox railo/webapps/www/$TESTFRAMEWORK
-				;;
-		esac
-		ln -s $BUILD_DIR railo/webapps/www/$2
 		chmod a+x railo/start
 		chmod a+x railo/stop
 

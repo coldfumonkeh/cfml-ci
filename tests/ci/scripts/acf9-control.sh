@@ -1,4 +1,4 @@
-pushd jrun4/bin > /dev/null
+pushd $WORK_DIR/jrun4/bin > /dev/null
 case $1 in
 	start)
 		./jrun -start cfusion>/dev/null&

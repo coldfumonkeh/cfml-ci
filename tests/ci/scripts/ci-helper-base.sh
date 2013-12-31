@@ -74,9 +74,9 @@ case $1 in
 		fi
 		echo "Starting server... ($HEALTHCHECK_URL)"
 		$CONTROL_SCRIPT start&
-		until curl --connect-timeout 2 -m 2 -s $HEALTHCHECK_URL>/dev/null
+		until [ "`curl --connect-timeout 2 -m 2 -s -o /dev/null -w "%{http_code}" $HEALTHCHECK_URL`" == "200" ]
 		do
-			echo "Waiting for server... (Last exit code: $?)"
+			echo "Waiting for server to start..."
 			sleep 2
 		done
 		;;

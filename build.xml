@@ -124,7 +124,7 @@ Valid values are:
 
   <target name="is-server-running">
     <condition property="server.running">
-	  <and>
+      <and>
         <socket port="${server.port}" server="${server.name}" />
         <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
       </and>

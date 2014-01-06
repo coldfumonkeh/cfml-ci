@@ -122,10 +122,6 @@ Valid values are:
     </exec>
   </target>
 
-  <target name="test-ci" depends="start-server,test,stop-server">
-    <fail if="mxunit.failed" message="At least one test failure!"/>
-  </target>
-  
   <target name="is-server-running">
     <condition property="server.running">
 	  <and>
@@ -135,6 +131,10 @@ Valid values are:
     </condition>
   </target>
 
+  <target name="test-ci" depends="start-server,test,stop-server">
+    <fail if="mxunit.failed" message="At least one test failure!"/>
+  </target>
+  
   <target name="test" depends="run-tests" />
 
   <target description="Make output directories and run the MXUnit task" name="run-tests">

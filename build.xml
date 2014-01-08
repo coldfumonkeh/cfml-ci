@@ -93,7 +93,7 @@ Valid values are:
   <property name="output.dir" value="${test.dir}/ci/results/"/>
 
   <target name="install-ci-deps">
-    <exec executable="/bin/bash" failonerror="true">
+    <exec executable="/bin/bash" failonerror="true" osfamily="unix">
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
       <env key="PLATFORM_URL" value="${platform.url}" />
@@ -102,15 +102,30 @@ Valid values are:
       <env key="STOP_PORT" value="${stop.port}" />
       <arg line="${test.dir}/ci/scripts/ci-helper-${platform.helper}.sh install ${test.project}"/>
     </exec>
+    <exec executable="cmd" failonerror="true" osfamily="windows">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
+      <env key="PLATFORM_URL" value="${platform.url}" />
+      <env key="MXUNIT_URL" value="${mxunit.url}" />
+	  <arg value="/k" />
+      <arg value="${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat install ${test.project}" />
+    </exec>
   </target>
 
-  <target name="start-server">
+  <target name="start-server" unless="server.running" depends="is-server-running">
     <exec executable="/bin/bash" spawn="false" failonerror="true" osfamily="unix">
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
       <env key="SERVER_PORT" value="${server.port}" />
       <arg line="${test.dir}/ci/scripts/ci-helper-${platform.helper}.sh start"/>
     </exec>
+	<exec executable="cmd" spawn="yes" dir="${work.dir}/railo" osfamily="windows">
+	  <arg value="/k"/>
+	  <arg value="start.bat"/>
+	</exec>
+	<waitfor maxwait="30" maxwaitunit="second">
+	  <resourcecontains resource="server.running" substring=""/>
+	</waitfor>
   </target>
 
   <target name="stop-server">
@@ -120,6 +135,10 @@ Valid values are:
       <env key="SERVER_PORT" value="${server.port}" />
       <arg line="${test.dir}/ci/scripts/ci-helper-${platform.helper}.sh stop"/>
     </exec>
+	<exec executable="cmd" spawn="yes" dir="${work.dir}/railo" osfamily="windows">
+	  <arg value="/k"/>
+	  <arg value="stop.bat"/>
+	</exec>
   </target>
 
   <target name="is-server-running">
@@ -130,6 +149,12 @@ Valid values are:
       </and>
     </condition>
   </target>
+  
+  <target name="remove-work-dir">
+    <delete dir="${work.dir}" />
+  </target>
+  
+  <target name="clean" depends="remove-work-dir,install-ci-deps,test" />
 
   <target name="test-ci" depends="start-server,test,stop-server">
     <fail if="mxunit.failed" message="At least one test failure!"/>

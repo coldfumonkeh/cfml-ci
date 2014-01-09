@@ -26,10 +26,6 @@
   <!-- the directory containing your project web root, this will be symlinked
     in to the webserver.  Might be able to be left blank -->
   <property name="build.dir" value="" />
-  
-  <!-- the directory containing the scripts being executed for the build,
-    may only be needed for windows builds  -->
-  <property name="script.dir" value="" />
 
   <!-- PLATFORMS -->
 
@@ -111,10 +107,10 @@ Valid values are:
       <env key="BUILD_DIR" value="${build.dir}" />
       <env key="PLATFORM_URL" value="${platform.url}" />
       <env key="MXUNIT_URL" value="${mxunit.url}" />
-	  <env key="SCRIPT_DIR" value="${script.dir}" />
+	  <env key="SCRIPT_DIR" value="${basedir}" />
 	  <env key="TEST_PROJECT" value="${test.project}" />
 	  <arg value="/k" />
-      <arg value="${script.dir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat install ${test.project}" />
+      <arg value="${basedir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat install ${test.project}" />
     </exec>
   </target>
 
@@ -129,9 +125,9 @@ Valid values are:
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
 	  <arg value="/k" />
-      <arg value="${script.dir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat start" />
+      <arg value="${basedir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat start" />
     </exec>
-	<waitfor maxwait="10" maxwaitunit="second">
+	<waitfor maxwait="15" maxwaitunit="second">
 	  <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
 	</waitfor>
   </target>
@@ -147,7 +143,7 @@ Valid values are:
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
 	  <arg value="/k" />
-      <arg value="${script.dir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat stop" />
+      <arg value="${basedir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat stop" />
     </exec>
   </target>
 
@@ -176,7 +172,7 @@ Valid values are:
     <taskdef classname="au.com.imagichine.ant.MxunitOutputAntTask" classpath="${mxunit.output.jar}" name="mxunitoutputtask"/>
     <mxunittask
       defaultrunner="/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"
-      outputdir="${output.dir}"
+      outputdir="${basedir}/${output.dir}"
       port="${server.port}" server="${server.name}"
       testResultsSummary="${test.project}.summary"
       verbose="false"
@@ -185,11 +181,11 @@ Valid values are:
         <directory
           componentPath="${test.dir}"
           packageName="${test.project}"
-          path="${work.dir}/railo/webapps/www/${test.project}/${test.dir}/"
+          path="${work.dir}/${platform.helper}/${build.dir}/${test.project}/${test.dir}/"
           recurse="false"
           remoteMethod="run"/>
     </mxunittask>
-    <mxunitoutputtask resultsdirectory="${output.dir}" />
+    <mxunitoutputtask resultsdirectory="${basedir}/${output.dir}" />
     <fail if="mxunit.error" message="An error occured running MXUnit" />
   </target>
 

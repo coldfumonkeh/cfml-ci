@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project basedir="." default="test" name="CFML CI">
+<project basedir="." default="test-ci" name="CFML CI">
 
   <!--
     The CFML CI template project.
@@ -26,6 +26,10 @@
   <!-- the directory containing your project web root, this will be symlinked
     in to the webserver.  Might be able to be left blank -->
   <property name="build.dir" value="" />
+  
+  <!-- the directory containing the scripts being executed for the build,
+    may only be needed for windows builds  -->
+  <property name="script.dir" value="" />
 
   <!-- PLATFORMS -->
 
@@ -107,8 +111,10 @@ Valid values are:
       <env key="BUILD_DIR" value="${build.dir}" />
       <env key="PLATFORM_URL" value="${platform.url}" />
       <env key="MXUNIT_URL" value="${mxunit.url}" />
+	  <env key="SCRIPT_DIR" value="${script.dir}" />
+	  <env key="TEST_PROJECT" value="${test.project}" />
 	  <arg value="/k" />
-      <arg value="${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat install ${test.project}" />
+      <arg value="${script.dir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat install ${test.project}" />
     </exec>
   </target>
 
@@ -119,12 +125,18 @@ Valid values are:
       <env key="SERVER_PORT" value="${server.port}" />
       <arg line="${test.dir}/ci/scripts/ci-helper-${platform.helper}.sh start"/>
     </exec>
-	<exec executable="cmd" spawn="yes" dir="${work.dir}/railo" osfamily="windows">
+	<exec executable="cmd" spawn="true" osfamily="windows">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
+	  <arg value="/k" />
+      <arg value="${script.dir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat start" />
+    </exec>
+	<!--<exec executable="cmd" spawn="yes" dir="${work.dir}/${platform.helper}" osfamily="windows">
 	  <arg value="/k"/>
 	  <arg value="start.bat"/>
-	</exec>
-	<waitfor maxwait="30" maxwaitunit="second">
-	  <resourcecontains resource="server.running" substring=""/>
+	</exec>-->
+	<waitfor maxwait="10" maxwaitunit="second">
+	  <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
 	</waitfor>
   </target>
 
@@ -135,18 +147,21 @@ Valid values are:
       <env key="SERVER_PORT" value="${server.port}" />
       <arg line="${test.dir}/ci/scripts/ci-helper-${platform.helper}.sh stop"/>
     </exec>
-	<exec executable="cmd" spawn="yes" dir="${work.dir}/railo" osfamily="windows">
+	<exec executable="cmd" spawn="true" osfamily="windows">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
+	  <arg value="/k" />
+      <arg value="${script.dir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat stop" />
+    </exec>
+	<!--<exec executable="cmd" spawn="yes" dir="${work.dir}/${platform.helper}" osfamily="windows">
 	  <arg value="/k"/>
 	  <arg value="stop.bat"/>
-	</exec>
+	</exec>-->
   </target>
 
   <target name="is-server-running">
     <condition property="server.running">
-      <and>
-        <socket port="${server.port}" server="${server.name}" />
-        <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
-      </and>
+      <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
     </condition>
   </target>
   
@@ -154,7 +169,7 @@ Valid values are:
     <delete dir="${work.dir}" />
   </target>
   
-  <target name="clean" depends="remove-work-dir,install-ci-deps,test" />
+  <target name="clean" depends="remove-work-dir,install-ci-deps,test-ci" />
 
   <target name="test-ci" depends="start-server,test,stop-server">
     <fail if="mxunit.failed" message="At least one test failure!"/>
@@ -178,7 +193,7 @@ Valid values are:
         <directory
           componentPath="${test.dir}"
           packageName="${test.project}"
-          path="/${test.project}/${test.dir}/"
+          path="${work.dir}/railo/webapps/www/${test.project}/${test.dir}/"
           recurse="false"
           remoteMethod="run"/>
     </mxunittask>

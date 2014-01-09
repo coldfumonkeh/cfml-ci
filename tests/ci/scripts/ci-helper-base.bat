@@ -21,19 +21,25 @@ if NOT "%1"=="install" (
   )
 ) else (
   REM if only one argument
+  if NOT exist %WORK_DIR% (
+    REM create work directory
+	mkdir %WORK_DIR%
+  )
   if "%2"=="" (
     echo "usage: %0 install PROJECTNAME";
     exit 1
   )
 )
 
-REM set WGET_OPTS="-nv"
-
 if "%1"=="install" (
-  call:download_and_extract %PLATFORM_URL% %platform%
-  call:download_and_extract %MXUNIT_URL% mxunit
+  call:download_and_extract %PLATFORM_URL%
+  call:download_and_extract %MXUNIT_URL%
+) else if "%1%"=="start" (
+  REM handled in helper file for specific server
+} else if "%1%"=="stop" (
+  REM handled in helper file for specific server
 ) else (
-  echo "Usage: %0 install"
+  echo "Usage: %0 {install|start|stop}"
   exit 1
 )
 
@@ -64,13 +70,13 @@ REM function for downloading and extracting files
   
   if %FILENAME_EXT%==.zip (
     echo unzipping %WORK_DIR%/%FILENAME%
-    unzip -q %WORK_DIR%/%FILENAME% -d %WORK_DIR%/%2
+    unzip -q %WORK_DIR%/%FILENAME% -d %WORK_DIR%
   ) else (
     echo untarring %WORK_DIR%/%FILENAME%
     REM untar goes here
   )
 
-  echo del %WORK_DIR%/%FILENAME%
-  DEL %WORK_DIR%/%FILENAME%
+  echo deleting %WORK_DIR%\%FILENAME%
+  DEL %WORK_DIR%\%FILENAME%
   ENDLOCAL
 GOTO:EOF

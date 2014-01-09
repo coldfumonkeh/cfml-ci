@@ -131,10 +131,6 @@ Valid values are:
 	  <arg value="/k" />
       <arg value="${script.dir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat start" />
     </exec>
-	<!--<exec executable="cmd" spawn="yes" dir="${work.dir}/${platform.helper}" osfamily="windows">
-	  <arg value="/k"/>
-	  <arg value="start.bat"/>
-	</exec>-->
 	<waitfor maxwait="10" maxwaitunit="second">
 	  <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
 	</waitfor>
@@ -153,10 +149,6 @@ Valid values are:
 	  <arg value="/k" />
       <arg value="${script.dir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat stop" />
     </exec>
-	<!--<exec executable="cmd" spawn="yes" dir="${work.dir}/${platform.helper}" osfamily="windows">
-	  <arg value="/k"/>
-	  <arg value="stop.bat"/>
-	</exec>-->
   </target>
 
   <target name="is-server-running">

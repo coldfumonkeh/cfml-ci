@@ -107,7 +107,7 @@ Valid values are:
       <env key="BUILD_DIR" value="${build.dir}" />
       <env key="PLATFORM_URL" value="${platform.url}" />
       <env key="MXUNIT_URL" value="${mxunit.url}" />
-	  <env key="TEST_PROJECT" value="${test.project}" />
+	  <env key="BASE_DIR" value="${basedir}" />
 	  <arg value="/k" />
       <arg value="${basedir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat install ${test.project}" />
     </exec>

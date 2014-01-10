@@ -7,7 +7,7 @@ if NOT defined WORK_DIR (
 )
 
 if NOT defined BUILD_DIR (
-  set BUILD_DIR=`pwd`
+  set BUILD_DIR=%BASE_DIR%
 )
 
 echo "Working directory: %WORK_DIR%, Build directory: %BUILD_DIR%"
@@ -62,7 +62,7 @@ REM function for downloading and extracting files
     REM make sure file does not already exist
 	if NOT exist %WORK_DIR%/%FILENAME% (
       echo Downloading %1 to %WORK_DIR%/%FILENAME%
-      cscript /nologo tests/ci/scripts/wget.js %1 %WORK_DIR%/%FILENAME%
+      cscript /nologo %TEST_DIR%/ci/scripts/wget.js %1 %WORK_DIR%/%FILENAME%
 	)
   )
   

@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 REM get current path of batch file scripts
 for /f %%i in ("%0") do set curpath=%%~dpi
@@ -7,9 +7,9 @@ call %curpath%ci-helper-base.bat %1 %2
 if "%1"=="install" (
   move %WORK_DIR%\railo-express* %WORK_DIR%\railo
   move %WORK_DIR%\mxunit* %WORK_DIR%\railo\webapps\www\mxunit
-  echo copying %SCRIPT_DIR%\tests\ %WORK_DIR%\railo\webapps\www\%TEST_PROJECT%\tests\
-  mkdir %WORK_DIR%\railo\webapps\www\%TEST_PROJECT%\tests\
-  xcopy %SCRIPT_DIR%\tests\*.* %WORK_DIR%\railo\webapps\www\%TEST_PROJECT%\tests\ /s /e
+
+  echo creating symlink to scripts directory %BUILD_DIR% railo\webapps\www\%2
+  mklink /D %WORK_DIR%\railo\webapps\www\%2 %BUILD_DIR%
 ) else if "%1"=="start" (
   echo changing dir to %WORK_DIR%\railo
   cd %WORK_DIR%\railo

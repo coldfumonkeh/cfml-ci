@@ -24,7 +24,7 @@
   <property name="work.dir" value="/tmp/work" />
 
   <!-- the directory containing your project web root, this will be symlinked
-    in to the webserver.  Might be able to be left blank -->
+    in to the webserver.  Might be able to be left blank.  Necessary for "windows" builds -->
   <property name="build.dir" value="" />
 
   <!-- PLATFORMS -->
@@ -39,7 +39,7 @@
 
   <!-- Remote URLs -->
   <property name="railo40.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.0.4.001-nojre.tar.gz" />
-  <property name="railo41.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.1.2.005-nojre.tar.gz" />
+  <property name="railo41.remote.url" value="http://getrailo.com/railo/remote/download/4.1.2.005/railix/windows/railo-express-4.1.2.005-nojre.zip" />
   <property name="railo42beta.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.2.0.000-nojre.tar.gz" />
   <property name="acf10-linux32.remote.url" value="http://cfml-ci.s3.amazonaws.com/cf10-linux32.tar.gz" />
   <property name="acf10-linux64.remote.url" value="http://cfml-ci.s3.amazonaws.com/cf10-linux64.tar.gz" />
@@ -107,7 +107,6 @@ Valid values are:
       <env key="BUILD_DIR" value="${build.dir}" />
       <env key="PLATFORM_URL" value="${platform.url}" />
       <env key="MXUNIT_URL" value="${mxunit.url}" />
-	  <env key="SCRIPT_DIR" value="${basedir}" />
 	  <env key="TEST_PROJECT" value="${test.project}" />
 	  <arg value="/k" />
       <arg value="${basedir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat install ${test.project}" />
@@ -181,7 +180,7 @@ Valid values are:
         <directory
           componentPath="${test.dir}"
           packageName="${test.project}"
-          path="${work.dir}/${platform.helper}/${build.dir}/${test.project}/${test.dir}/"
+          path="${basedir}/${test.dir}/"
           recurse="false"
           remoteMethod="run"/>
     </mxunittask>

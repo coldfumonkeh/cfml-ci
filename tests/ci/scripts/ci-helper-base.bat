@@ -30,17 +30,18 @@ if NOT "%1"=="install" (
     exit 1
   )
 )
-
 if "%1"=="install" (
   call:download_and_extract %PLATFORM_URL%
   call:download_and_extract %MXUNIT_URL%
-) else if "%1%"=="start" (
-  REM handled in helper file for specific server
-} else if "%1%"=="stop" (
-  REM handled in helper file for specific server
 ) else (
-  echo "Usage: %0 {install|start|stop}"
-  exit 1
+  REM no "else if in batch file logic"
+  REM so need to do a convoluted method to handle it
+  if NOT "%1"=="start" (
+    if NOT "%1"=="stop" (
+      echo "Usage: %0 {install|start|stop}"
+      exit 1
+	)
+  )
 )
 
 goto:eof

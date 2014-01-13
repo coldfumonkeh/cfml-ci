@@ -132,7 +132,7 @@ Valid values are:
 	</waitfor>
   </target>
 
-  <target name="stop-server">
+  <target name="stop-server" if="server.running">
     <exec executable="/bin/bash" spawn="false" failonerror="true" osfamily="unix">
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
@@ -153,7 +153,7 @@ Valid values are:
     </condition>
   </target>
   
-  <target name="remove-work-dir">
+  <target name="remove-work-dir" depends="is-server-running,stop-server">
     <!-- workaround for bug in ANT task that removes original, symlinked directory -->
     <exec executable="/bin/bash" spawn="false" failonerror="true" osfamily="unix">
       <arg line="rm -rf ${work.dir}"/>

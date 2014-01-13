@@ -154,7 +154,15 @@ Valid values are:
   </target>
   
   <target name="remove-work-dir">
-    <delete dir="${work.dir}" />
+    <!-- workaround for bug in ANT task that removes original, symlinked directory -->
+    <exec executable="/bin/bash" spawn="false" failonerror="true" osfamily="unix">
+      <arg line="rm -rf ${work.dir}"/>
+    </exec>
+    <exec executable="cmd" spawn="false" osfamily="windows">
+	  <arg value="/c" />
+	  <arg value="rmdir /s /q ${work.dir}" />
+	</exec>
+    <!--<delete dir="${work.dir}" />-->
   </target>
   
   <target name="clean" depends="remove-work-dir,install-ci-deps,test-ci" />

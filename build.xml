@@ -145,6 +145,12 @@ Valid values are:
 	  <arg value="/k" />
       <arg value="${basedir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat stop" />
     </exec>
+	<!--make sure server has shutdown-->
+    <waitfor maxwait="15" maxwaitunit="second">
+      <not>
+        <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
+      </not> 
+    </waitfor>
   </target>
 
   <target name="is-server-running">
@@ -162,7 +168,6 @@ Valid values are:
 	  <arg value="/c" />
 	  <arg value="rmdir /s /q ${work.dir}" />
 	</exec>
-    <!--<delete dir="${work.dir}" />-->
   </target>
   
   <target name="clean" depends="remove-work-dir,install-ci-deps,test-ci" />

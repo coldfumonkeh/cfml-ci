@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project basedir="." default="test" name="CFML CI">
+<project basedir="." default="test-ci" name="CFML CI">
 
   <!--
     The CFML CI template project.
@@ -8,6 +8,9 @@
 
     https://github.com/marcins/cfml-ci
   -->
+  
+  <!-- location of tests directory -->
+  <property name="test.dir" value="tests" />
 
   <!-- you should change this value to a short name for your project
     will be used a symlink so shouldn't contain spaces -->
@@ -21,7 +24,7 @@
   <property name="work.dir" value="/tmp/work" />
 
   <!-- the directory containing your project web root, this will be symlinked
-    in to the webserver.  Might be able to be left blank -->
+    in to the webserver.  Might be able to be left blank.  Necessary for "windows" builds -->
   <property name="build.dir" value="" />
 
   <!-- PLATFORMS -->
@@ -60,7 +63,7 @@
   <property name="acf902-linux64.helper" value="acf9" />
 
   <fail unless="platform" message="Platform is not set" />
-  <fail unless="${platform}.${source}.url">Unkown platform ${platform} for source ${source}.
+  <fail unless="${platform}.${source}.url">Unknown platform ${platform} for source ${source}.
 
 Valid values are:
  railo40
@@ -82,47 +85,97 @@ Valid values are:
   <propertycopy name="platform.helper" from="${platform}.helper" />
   <propertycopy name="mxunit.url" from="mxunit.${source}.url" />
 
-  <property name="mxunit.jar" value="tests/ci/mxunit-ant.jar"/>
-  <property name="mxunit.output.jar" value="tests/ci/mxunit-output-ant.jar"/>
+  <property name="mxunit.jar" value="${test.dir}/ci/mxunit-ant.jar"/>
+  <property name="mxunit.output.jar" value="${test.dir}/ci/mxunit-output-ant.jar"/>
   <property name="server.name" value="localhost"/>
   <property name="server.port" value="8888"/>
   <property name="stop.port" value="8887"/>
-  <property name="output.dir" value="tests/ci/results/"/>
+  <property name="output.dir" value="${test.dir}/ci/results/"/>
 
   <target name="install-ci-deps">
-    <exec executable="/bin/bash" failonerror="true">
+    <exec executable="/bin/bash" failonerror="true" osfamily="unix">
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
       <env key="PLATFORM_URL" value="${platform.url}" />
       <env key="MXUNIT_URL" value="${mxunit.url}" />
       <env key="SERVER_PORT" value="${server.port}" />
       <env key="STOP_PORT" value="${stop.port}" />
-      <arg line="tests/ci/scripts/ci-helper-${platform.helper}.sh install ${test.project}"/>
+      <arg line="${test.dir}/ci/scripts/ci-helper-${platform.helper}.sh install ${test.project}"/>
+    </exec>
+    <exec executable="cmd" failonerror="true" osfamily="windows">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
+      <env key="PLATFORM_URL" value="${platform.url}" />
+      <env key="MXUNIT_URL" value="${mxunit.url}" />
+	  <env key="BASE_DIR" value="${basedir}" />
+	  <env key="TEST_DIR" value="${test.dir}" />
+	  <arg value="/k" />
+      <arg value="${basedir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat install ${test.project}" />
     </exec>
   </target>
 
-  <target name="start-server">
-    <exec executable="/bin/bash" spawn="false" failonerror="true">
+  <target name="start-server" unless="server.running" depends="is-server-running">
+    <exec executable="/bin/bash" spawn="false" failonerror="true" osfamily="unix">
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
       <env key="SERVER_PORT" value="${server.port}" />
-      <arg line="tests/ci/scripts/ci-helper-${platform.helper}.sh start"/>
+      <arg line="${test.dir}/ci/scripts/ci-helper-${platform.helper}.sh start"/>
     </exec>
+	<exec executable="cmd" spawn="true" osfamily="windows">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
+	  <arg value="/k" />
+      <arg value="${basedir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat start" />
+    </exec>
+	<waitfor maxwait="15" maxwaitunit="second">
+	  <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
+	</waitfor>
   </target>
 
-  <target name="stop-server">
-    <exec executable="/bin/bash" spawn="false" failonerror="true">
+  <target name="stop-server" if="server.running">
+    <exec executable="/bin/bash" spawn="false" failonerror="true" osfamily="unix">
       <env key="WORK_DIR" value="${work.dir}" />
       <env key="BUILD_DIR" value="${build.dir}" />
       <env key="SERVER_PORT" value="${server.port}" />
-      <arg line="tests/ci/scripts/ci-helper-${platform.helper}.sh stop"/>
+      <arg line="${test.dir}/ci/scripts/ci-helper-${platform.helper}.sh stop"/>
     </exec>
+	<exec executable="cmd" spawn="true" osfamily="windows">
+      <env key="WORK_DIR" value="${work.dir}" />
+      <env key="BUILD_DIR" value="${build.dir}" />
+	  <arg value="/k" />
+      <arg value="${basedir}/${test.dir}/ci/scripts/ci-helper-${platform.helper}.bat stop" />
+    </exec>
+	<!--make sure server has shutdown-->
+    <waitfor maxwait="15" maxwaitunit="second">
+      <not>
+        <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
+      </not> 
+    </waitfor>
   </target>
+
+  <target name="is-server-running">
+    <condition property="server.running">
+      <http url="http://${server.name}:${server.port}/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"/>
+    </condition>
+  </target>
+  
+  <target name="remove-work-dir" depends="is-server-running,stop-server">
+    <!-- workaround for bug in ANT task that removes original, symlinked directory -->
+    <exec executable="/bin/bash" spawn="false" failonerror="true" osfamily="unix">
+      <arg line="rm -rf ${work.dir}"/>
+    </exec>
+    <exec executable="cmd" spawn="false" osfamily="windows">
+	  <arg value="/c" />
+	  <arg value="rmdir /s /q ${work.dir}" />
+	</exec>
+  </target>
+  
+  <target name="clean" depends="remove-work-dir,install-ci-deps,test-ci" />
 
   <target name="test-ci" depends="start-server,test,stop-server">
     <fail if="mxunit.failed" message="At least one test failure!"/>
   </target>
-
+  
   <target name="test" depends="run-tests" />
 
   <target description="Make output directories and run the MXUnit task" name="run-tests">
@@ -131,21 +184,21 @@ Valid values are:
     <taskdef classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}" name="mxunittask"/>
     <taskdef classname="au.com.imagichine.ant.MxunitOutputAntTask" classpath="${mxunit.output.jar}" name="mxunitoutputtask"/>
     <mxunittask
-      defaultrunner="/${test.project}/tests/ci/HttpAntRunner.cfc"
-      outputdir="${output.dir}"
+      defaultrunner="/${test.project}/${test.dir}/ci/HttpAntRunner.cfc"
+      outputdir="${basedir}/${output.dir}"
       port="${server.port}" server="${server.name}"
       testResultsSummary="${test.project}.summary"
       verbose="false"
       haltonerror="true" errorproperty="mxunit.error"
       failureproperty="mxunit.failed">
         <directory
-          componentPath="tests"
+          componentPath="${test.dir}"
           packageName="${test.project}"
-          path="/${test.project}/tests/"
+          path="${basedir}/${test.dir}/"
           recurse="false"
           remoteMethod="run"/>
     </mxunittask>
-    <mxunitoutputtask resultsdirectory="${output.dir}" />
+    <mxunitoutputtask resultsdirectory="${basedir}/${output.dir}" />
     <fail if="mxunit.error" message="An error occured running MXUnit" />
   </target>
 

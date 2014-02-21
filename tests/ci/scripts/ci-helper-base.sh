@@ -1,5 +1,4 @@
 #!/bin/bash
-# WORK_DIR and BUILD_DIR must be set!
 if [ ! -n "$WORK_DIR" ]; then
 	echo "WORK_DIR must be set!"
 	exit 1
@@ -58,6 +57,7 @@ HEALTHCHECK_URL="http://localhost:$SERVER_PORT"
 case $1 in
 	install)
 		if [ -d $WORK_DIR ]; then
+			echo "Removing $WORK_DIR"
 			rm -rf $WORK_DIR
 		fi
 
@@ -65,7 +65,23 @@ case $1 in
 		cd $WORK_DIR
 
 		download_and_extract $PLATFORM_URL
-		download_and_extract $MXUNIT_URL
+
+		# assume platform dir is the only dir
+		FIRST_DIR=`ls -b`
+		if [ "$FIRST_DIR" != "$PLATFORM_DIR" ]; then
+			mv $FIRST_DIR $PLATFORM_DIR
+		fi
+		download_and_extract $TESTFRAMEWORK_URL
+
+		case $TESTFRAMEWORK in
+			mxunit)
+				mv mxunit* "$WEBROOT/$TESTFRAMEWORK"
+				;;
+			testbox)
+				mv testbox "$WEBROOT/$TESTFRAMEWORK"
+				;;
+		esac
+		ln -s $BUILD_DIR $WEBROOT/$2
 		;;
 	start)
 		if [ ! -f $CONTROL_SCRIPT ]; then

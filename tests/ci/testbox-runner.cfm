@@ -22,12 +22,10 @@ if( url.reporter eq "ANTJunit" ){
           fileWrite( url.reportpath & "/TEST-" & thisSuite.XMLAttributes.name & ".xml", toString( thisSuite ) );
      }
 }
-/*
-NEEDS PATCHED TESTBOX!
+
 testResult = testbox.getResult();
 errors = testResult.getTotalFail() + testResult.getTotalError();
-fileWrite( url.reportpath & "/TEST.properties", errors ? "test.failed=true" : "test.passed=true" );
-*/
+fileWrite( url.reportpath & "/testbox.properties", errors ? "testbox.failed=true" : "testbox.passed=true" );
 // Writeout Results
 fileWrite(url.reportPath & "/output.txt", results);
 writeoutput( results );

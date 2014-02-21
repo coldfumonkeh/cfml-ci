@@ -37,7 +37,7 @@
   <property name="acf902-linux64.local.url" value="/opt/ci/cf902-linux64.tar.gz" />
 
   <!-- test frameworks -->
-  <property name="testbox.local.url" value="/opt/ci/testbox_1.0.0.zip" />
+  <property name="testbox.local.url" value="/opt/ci/testbox_1.1.0.zip" />
   <property name="mxunit.local.url" value="/opt/ci/fix-railo-nulls.zip" />
 
   <!-- Remote URLs -->
@@ -48,7 +48,7 @@
   <property name="acf10-linux64.remote.url" value="http://cfml-ci.s3.amazonaws.com/cf10-linux64.tar.gz" />
   <property name="acf902-linux64.remote.url" value="http://cfml-ci.s3.amazonaws.com/cf902-linux64.tar.gz" />
 
-  <property name="testbox.remote.url" value="http://downloads.ortussolutions.com/testbox_1.0.0.zip" />
+  <property name="testbox.remote.url" value="http://downloads.ortussolutions.com/testbox_1.1.0.zip" />
   <property name="mxunit.remote.url" value="https://github.com/marcins/mxunit/archive/fix-railo-nulls.zip" />
 
   <!--
@@ -137,6 +137,9 @@ Valid values are:
 
   <target name="test-ci" depends="start-server,test,stop-server">
     <fail if="mxunit.failed" message="At least one test failure!"/>
+
+    <property file="${output.dir}testbox.properties" />
+    <fail if="testbox.failed" message="At least one test failure!" />
   </target>
 
   <target name="test">

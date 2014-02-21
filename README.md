@@ -10,7 +10,7 @@ Use this template to add to your project so that your test suite gets run under 
 ### Requirement
 
  * a CI server (eg. [Travis CI](http://travis-ci.org/), [Jenkins](http://jenkins-ci.org/), [Bamboo](https://www.atlassian.com/software/bamboo), etc) running on Linux or Mac OS X
- * an [MXUnit](http://mxunit.org) based test suite (or the desire to create one)
+ * a [TestBox](http://wiki.coldbox.org/wiki/TestBox.cfm) or an [MXUnit](http://mxunit.org) based test suite (or the desire to create one)
  * [Apache Ant](http://ant.apache.org/) 1.9+ (older versions have a bug with waiting for shell scripts to return)
  * awk (not mawk - this was what was on the Debian Jenkins box I was testing with an it does't work), the awk built into Mac OS X is fine
 
@@ -30,6 +30,8 @@ To get started adding the CFML CI template to your project:
  * *test.project*: a short name for your project, this will be used as the context root for installing your project into the test server
  * *work.dir*: working directory where the server will be installed - this should be a directory that doesn't already exist as it gets deleted and re-created on every test run, default is /tmp/work
  * *build.dir*: directory that gets mapped into the webserver, normally this will probably just be wherever your build.xml is (the default).
+
+ * *test.framework*: whether to use the TestBox or MXUnit test runner for your tests.
 
 ##### Platforms
 

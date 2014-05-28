@@ -31,8 +31,8 @@
   <!-- Local URLs: Set these to locally available copies of the test server
   platforms if available to avoid a remote HTTP download - won't work for Travis CI -->
   <property name="railo41.local.url" value="/opt/ci/railo-express-4.1.2.005-nojre.tar.gz" />
-  <property name="railo42.local.url" value="/opt/ci/railo-express-4.1.2.005-nojre.tar.gz" />
-  <property name="railo41-osx.local.url" value="/opt/ci/railo-express-4.2.1.000-nojre.tar.gz" />
+  <property name="railo42.local.url" value="/opt/ci/railo-express-4.2.1.000-nojre.tar.gz" />
+  <property name="railo41-osx.local.url" value="/opt/ci/railo-express-4.1.2.005-macosx.zip" />
   <property name="acf10-linux32.local.url" value="/opt/ci/cf10-linux32.tar.gz" />
   <property name="acf10-linux64.local.url" value="/opt/ci/cf10-linux64.tar.gz" />
   <property name="acf902-linux64.local.url" value="/opt/ci/cf902-linux64.tar.gz" />
@@ -63,7 +63,7 @@
   <property name="railo40.helper" value="railo" />
   <property name="railo41.helper" value="railo" />
   <property name="railo41-osx.helper" value="railo" />
-  <property name="railo42.helper" value="railo" />
+  <property name="railo42.helper" value="railo-42plus" />
   <property name="acf10-linux32.helper" value="acf" />
   <property name="acf10-linux64.helper" value="acf" />
   <property name="acf902-linux64.helper" value="acf9" />

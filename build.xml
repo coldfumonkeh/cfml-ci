@@ -31,7 +31,8 @@
   <!-- Local URLs: Set these to locally available copies of the test server
   platforms if available to avoid a remote HTTP download - won't work for Travis CI -->
   <property name="railo41.local.url" value="/opt/ci/railo-express-4.1.2.005-nojre.tar.gz" />
-  <property name="railo41-osx.local.url" value="/opt/ci/railo-express-4.1.2.005-macosx.zip" />
+  <property name="railo42.local.url" value="/opt/ci/railo-express-4.1.2.005-nojre.tar.gz" />
+  <property name="railo41-osx.local.url" value="/opt/ci/railo-express-4.2.1.000-nojre.tar.gz" />
   <property name="acf10-linux32.local.url" value="/opt/ci/cf10-linux32.tar.gz" />
   <property name="acf10-linux64.local.url" value="/opt/ci/cf10-linux64.tar.gz" />
   <property name="acf902-linux64.local.url" value="/opt/ci/cf902-linux64.tar.gz" />
@@ -43,7 +44,7 @@
   <!-- Remote URLs -->
   <property name="railo40.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.0.4.001-nojre.tar.gz" />
   <property name="railo41.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.1.2.005-nojre.tar.gz" />
-  <property name="railo42beta.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.2.0.000-nojre.tar.gz" />
+  <property name="railo42.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.2.1.000-nojre.tar.gz" />
   <property name="acf10-linux32.remote.url" value="http://cfml-ci.s3.amazonaws.com/cf10-linux32.tar.gz" />
   <property name="acf10-linux64.remote.url" value="http://cfml-ci.s3.amazonaws.com/cf10-linux64.tar.gz" />
   <property name="acf902-linux64.remote.url" value="http://cfml-ci.s3.amazonaws.com/cf902-linux64.tar.gz" />
@@ -62,7 +63,7 @@
   <property name="railo40.helper" value="railo" />
   <property name="railo41.helper" value="railo" />
   <property name="railo41-osx.helper" value="railo" />
-  <property name="railo42beta.helper" value="railo" />
+  <property name="railo42.helper" value="railo" />
   <property name="acf10-linux32.helper" value="acf" />
   <property name="acf10-linux64.helper" value="acf" />
   <property name="acf902-linux64.helper" value="acf9" />
@@ -74,7 +75,7 @@ Valid values are:
  railo40
  railo41
  railo41-osx
- railo42beta
+ railo42
  acf10-linux32
  acf10-linux64
  acf902-linux64</fail>

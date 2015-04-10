@@ -35,7 +35,7 @@ To get started adding the CFML CI template to your project:
 
 ##### Platforms
 
-cfml-ci supports both Railo (4.0+) and Adobe ColdFusion (9.0.2, and 10). You can configure the various platforms and the URLs where they will be downloaded from. For Railo, Railo Express is used as the test server as it essentially comes "ready to go" so the download comes from Railo directly. For Adobe ColdFusion an "install" is required, and so ACF has been installed, configured and re-packaged for use by cfml-ci. Downloads for this ACF re-distribution are hosted on S3.
+cfml-ci supports Railo (4.0+), Lucee (4.x+) and Adobe ColdFusion (9.0.2, and 10). You can configure the various platforms and the URLs where they will be downloaded from. For Railo, Railo Express is used as the test server as it essentially comes "ready to go" so the download comes from Railo directly. For Adobe ColdFusion an "install" is required, and so ACF has been installed, configured and re-packaged for use by cfml-ci. Downloads for this ACF re-distribution are hosted on S3.
 
 If you are running cfml-ci in your own CI environment then it is recommended to have locally hosted copies of your target platforms, to avoid a slower download over the Internet. For Travis CI the URLs provided are fast (I assume Travis CI is on AWS as well).
 
@@ -90,6 +90,6 @@ There are some limitations to doing this will CFML - the main one is that CFML i
 
 Travis CI, in particular, works on virtual machines that are reset in between test runs - that means for every test run you need to setup the environment for the tests to run in. In the case of CFML, this means getting a web server running for the tests.
 
-In it's initial implementation a copy of [Railo Express](http://www.getrailo.org/index.cfm/download/) is downloaded during the setup phase, mxunit is then downloaded and extracted into the Railo Express webroot and the working copy of the code under test is symlinked in to the webroot. This means when Railo Express starts up everything is configured and ready.
+In its initial implementation a copy of [Railo Express](http://www.getrailo.org/index.cfm/download/) is downloaded during the setup phase, mxunit is then downloaded and extracted into the Railo Express webroot and the working copy of the code under test is symlinked in to the webroot. This means when Railo Express starts up everything is configured and ready.
 
 Support for Adobe ColdFusion 9.0.2 and 10 was added in December 2013, after getting some verbal email based approval from Adobe to repackage a Developer install of Adobe ColdFusion for use with CI.

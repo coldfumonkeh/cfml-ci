@@ -12,4 +12,4 @@ test:
   override:
     - ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$DIRTOUSE/work -Dbuild.dir=$DIRTOUSE -Dplatform=$PLATFORM test-ci
   post:
-    - cp -r $DIRTOUSE/tests/ci/results/ $CIRCLE_ARTIFACTS
+    - cp -r $DIRTOUSE/tests/ci/results/ $CIRCLE_TEST_REPORTS

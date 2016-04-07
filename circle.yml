@@ -1,0 +1,12 @@
+machine:
+  environment:
+    PLATFORM: lucee451
+    TESTFRAMEWORK: mxunit
+
+dependencies:
+  pre:
+    - ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$HOME -Dplatform=$PLATFORM install-ci-deps
+
+test:
+  override:
+    - ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$HOME -Dplatform=$PLATFORM test-ci

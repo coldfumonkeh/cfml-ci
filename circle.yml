@@ -1,0 +1,15 @@
+machine:
+  environment:
+    PLATFORM: lucee451
+    TESTFRAMEWORK: mxunit
+    DIRTOUSE: $HOME/$CIRCLE_PROJECT_REPONAME
+
+dependencies:
+  pre:
+    - ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$DIRTOUSE/work -Dbuild.dir=$DIRTOUSE -Dplatform=$PLATFORM install-ci-deps
+
+test:
+  override:
+    - ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$DIRTOUSE/work -Dbuild.dir=$DIRTOUSE -Dplatform=$PLATFORM test-ci
+  post:
+    - cp -r $DIRTOUSE/tests/ci/results/ $CIRCLE_TEST_REPORTS

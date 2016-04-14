@@ -9,7 +9,7 @@ Use this template to add to your project so that your test suite gets run under 
 
 ### Requirement
 
- * a CI server (eg. [Travis CI](http://travis-ci.org/), [Jenkins](http://jenkins-ci.org/), [Bamboo](https://www.atlassian.com/software/bamboo), etc) running on Linux or Mac OS X
+ * a CI server (eg. [Travis CI](http://travis-ci.org/), [CircleCI](https://circleci.com/), [Jenkins](http://jenkins-ci.org/), [Bamboo](https://www.atlassian.com/software/bamboo), etc) running on Linux or Mac OS X
  * a [TestBox](http://wiki.coldbox.org/wiki/TestBox.cfm) or an [MXUnit](http://mxunit.org) based test suite (or the desire to create one)
  * [Apache Ant](http://ant.apache.org/) 1.9+ (older versions have a bug with waiting for shell scripts to return)
  * awk (not mawk - this was what was on the Debian Jenkins box I was testing with an it does't work), the awk built into Mac OS X is fine
@@ -37,7 +37,7 @@ To get started adding the CFML CI template to your project:
 
 cfml-ci supports Railo (4.0+), Lucee (4.x+) and Adobe ColdFusion (9.0.2, and 10). You can configure the various platforms and the URLs where they will be downloaded from. For Railo, Railo Express is used as the test server as it essentially comes "ready to go" so the download comes from Railo directly. For Adobe ColdFusion an "install" is required, and so ACF has been installed, configured and re-packaged for use by cfml-ci. Downloads for this ACF re-distribution are hosted on S3.
 
-If you are running cfml-ci in your own CI environment then it is recommended to have locally hosted copies of your target platforms, to avoid a slower download over the Internet. For Travis CI the URLs provided are fast (I assume Travis CI is on AWS as well).
+If you are running cfml-ci in your own CI environment then it is recommended to have locally hosted copies of your target platforms, to avoid a slower download over the Internet. For Travis CI and CircleCI the URLs provided are fast (I assume Travis CI and CircleCI are on AWS as well).
 
 You can provide both "remote" and "local" URLs (or paths), by default local will be used unless you set the source property when running ant.  Either a URL or file path starting with a / is supported for URLs (technically both for remote and local, but it doesn't make sense for remote).
 
@@ -57,6 +57,15 @@ Travis implementation is relatively straightforward, there are sensible defaults
  * in Travis CI settings, toggle Travis CI on for your Github repository
  * push a commit to Github
  * check build status on Travis CI
+
+ ### CircleCI
+
+ The CircleCI implementation is similar to the Travis implementation above (minus the build matrix that tests all CFML engines in the same build):
+
+  * copy the `circle.yml` from this project into your repo root
+  * in CircleCI, add your Github repository
+  * push a commit to Github
+  * check build status on CircleCI
 
 ### Jenkins
 

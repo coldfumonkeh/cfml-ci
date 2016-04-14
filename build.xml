@@ -147,8 +147,8 @@ Valid values are:
   <target name="test-ci" depends="start-server,test,stop-server">
     <fail if="mxunit.failed" message="At least one test failure!"/>
 
-    <property file="${output.dir}testbox.properties" />
-    <fail if="testbox.failed" message="At least one test failure!" />
+    <property file="${output.dir}/testbox.properties" />
+    <fail if="test.failed" message="At least one test failure!" />
   </target>
 
   <target name="test">
@@ -158,8 +158,9 @@ Valid values are:
   </target>
 
   <target description="Make output directories and run the TestBox task" name="run-tests-testbox">
-    <get dest="${output.dir}/results.txt" src="http://${server.name}:${server.port}/${test.project}/tests/ci/testbox-runner.cfm?directory=${testbox.directory}&amp;reporter=text&amp;reportPath=${basedir}/${output.dir}" verbose="true" />
-    <concat><path path="${output.dir}/output.txt" /></concat>
+    <get dest="${output.dir}/results.txt" src="http://${server.name}:${server.port}/${test.project}/tests/ci/testbox-runner.cfm?directory=${testbox.directory}&amp;reporter=text&amp;reportPath=${basedir}/${output.dir}&amp;propertiesSummary=true&amp;propertiesFilename=testbox.properties" verbose="true" />
+    <concat><path path="${output.dir}/testbox.properties" /></concat>
+    <concat><path path="${output.dir}/results.txt" /></concat>
   </target>
 
   <target description="Make output directories and run the MXUnit task" name="run-tests-mxunit">

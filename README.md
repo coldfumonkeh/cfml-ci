@@ -58,7 +58,7 @@ Travis implementation is relatively straightforward, there are sensible defaults
  * push a commit to Github
  * check build status on Travis CI
 
- ### CircleCI
+### CircleCI
 
  The CircleCI implementation is similar to the Travis implementation above (minus the build matrix that tests all CFML engines in the same build):
 
